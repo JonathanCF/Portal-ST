@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id         Int           @id @default(autoincrement())
+  nome       String
+  email      String        @unique
+  senha      String
+  tipo       TipoUsuario
+  perfil     PerfilUsuario
+  permissoes String        @default("")
+  ativo      Boolean       @default(true)
+  criadoEm   DateTime      @default(now())
+
+  empresas            Empresa[] @relation("EmpresaCriador")
+  empresasResponsavel Empresa[] @relation("EmpresaResponsavel")
+
+  @@map("usuarios")
+}
+
+model Empresa {
+  id                       Int           @id @default(autoincrement())
+  tipoPessoa               TipoPessoa
+  razaoSocial              String?
+  nome                     String?
+  nomeFantasia             String
+  identificador            String        @unique
+  identificadorEstrangeiro String?
+  perfil                   PerfilEmpresa
+  faturamentoDireto        Boolean       @default(false)
+  documentoObrigatorio     String
+  documentosOpcionais      String        @default("")
+  status                   StatusEmpresa @default(PENDENTE)
+  motivoReprovacao         String?
+
+  criadoPorId Int
+  criadoPor   Usuario @relation("EmpresaCriador", fields: [criadoPorId], references: [id])
+
+  responsavelId Int?
+  responsavel   Usuario? @relation("EmpresaResponsavel", fields: [responsavelId], references: [id])
+
+  criadoEm     DateTime  @default(now())
+  atualizadoEm DateTime  @updatedAt
+  aprovadoEm   DateTime?
+
+  @@map("empresas")
+}
+
+enum TipoUsuario {
+  INTERNO
+  EXTERNO
+}
+
+enum PerfilUsuario {
+  // Perfis Externos
+  DESPACHANTE
+  BENEFICIARIO
+  CONSIGNATARIO
+  ARMADOR
+  AGENTE_CARGA
+  TRANSPORTADORA
+  NOVO_USUARIO
+  // Perfis Internos
+  ADMIN
+}
+
+enum TipoPessoa {
+  JURIDICA
+  FISICA
+  ESTRANGEIRA
+}
+
+enum PerfilEmpresa {
+  DESPACHANTE
+  BENEFICIARIO
+  CONSIGNATARIO
+  ARMADOR
+  AGENTE_CARGA
+  TRANSPORTADORA
+}
+
+enum StatusEmpresa {
+  PENDENTE
+  APROVADA
+  REPROVADA
+}
