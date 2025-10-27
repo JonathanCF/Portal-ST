@@ -329,7 +329,8 @@ O frontend estará disponível em: `http://localhost:3000`
 Parte 02
 1. De acordo com as tabelas abaixo, desenvolva as Querys solicitadas:
 
-a) Query para listar todos os funcionários com os nomes dos cargos e departamentos
+### a) Query para listar todos os funcionários com os nomes dos cargos e departamentos
+```bash
 SELECT 
     F.ID_Func,
     F.Nome_Func,
@@ -338,11 +339,13 @@ SELECT
 FROM FUNCIONARIO F
 JOIN CARGO C ON F.Id_FUN_Cargo = C.Id_CAR_Cargo
 JOIN DEPARTAMENTO D ON F.Id_FUN_Depto = D.Id_DEP_Depto;
+```
 
-b) Query para listar todos os funcionários que estão ativos na empresa
+### b) Query para listar todos os funcionários que estão ativos na empresa
 
 Funcionários ativos têm Data_Demis nula
 
+```bash
 SELECT 
     F.ID_Func,
     F.Nome_Func,
@@ -359,16 +362,19 @@ SELECT
 FROM FUNCIONARIO F
 JOIN DEPARTAMENTO D ON F.Id_FUN_Depto = D.Id_DEP_Depto
 WHERE D.Nome_DEP_Depto = 'Controladoria';
+```
 
-d) Query para listar todos os funcionários com salário superior a R$ 2.900,00
+### d) Query para listar todos os funcionários com salário superior a R$ 2.900,00
+```bash
 SELECT 
     F.ID_Func,
     F.Nome_Func,
     F.Salario
 FROM FUNCIONARIO F
 WHERE F.Salario > 2900;
-
-e) Query para listar a quantidade de pessoas em cada departamento
+```
+### e) Query para listar a quantidade de pessoas em cada departamento
+```bash
 SELECT 
     D.Nome_DEP_Depto AS Departamento,
     COUNT(F.ID_Func) AS Qtde_Funcionarios
@@ -376,3 +382,4 @@ FROM FUNCIONARIO F
 JOIN DEPARTAMENTO D ON F.Id_FUN_Depto = D.Id_DEP_Depto
 GROUP BY D.Nome_DEP_Depto
 ORDER BY Qtde_Funcionarios DESC;
+```
